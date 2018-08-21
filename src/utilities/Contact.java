@@ -42,5 +42,7 @@ public class Contact {
         this.classification = updated;
     }
 
-
+    public Target_Classification getClassification() {
+        return classification;
+    }
 }

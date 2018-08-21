@@ -4,6 +4,7 @@ import utilities.Contact;
 import utilities.Location;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Ship {
     String name;
@@ -16,6 +17,10 @@ public class Ship {
     boolean has_engine = false;
     private float mass;
     private float acceleration = 0;
+    //weapon range data
+    private float max_weapon_range;
+    private float optimal_weapon_range;
+    private float min_weapon_range;
 
     public Ship(Section [] sections, String name) {
         this.sections = sections;
@@ -28,17 +33,18 @@ public class Ship {
             System.out.println("WARNING: No Engine on ship "+this.toString());
         }
         calcWeight();
+        calcWeaponRanges();
         this.location = new Location(0,0,0);
     }
 
-    //TODO: Update this
+    //TODO: UPDATE
     public void accelerate(float force){
         if(has_engine){
             engine.increaseForce(mass, force);
         }
     }
 
-    //TODO: Update this
+    //TODO: UPDATE
     public void deccelerate(float force){
         if(has_engine){
             engine.decreaseForce(mass, force);
@@ -49,15 +55,15 @@ public class Ship {
         return this.location;
     }
 
-    //TODO: Update this
-    public void turn_xy(float increment){
-        location.updateFacing_xy(increment);
-    }
+    //TODO: UPDATE
+//    public void turnXY(float increment){
+//        location.updateFacing_xy(increment);
+//    }
 
-    //TODO: Update this
-    public void turn_xz(float increment){
-        location.updateFacing_xy(increment);
-    }
+    //TODO: UPDATE
+//    public void turnXZ(float increment){
+//        location.updateFacing_xy(increment);
+//    }
 
     public void setShip_size(ShipSize ship_size){
         this.ship_size = ship_size;
@@ -82,6 +88,28 @@ public class Ship {
             cum_weight+=s.getMass();
         }
         this.mass = cum_weight;
+    }
+
+    private void calcWeaponRanges(){
+
+        ArrayList<Float> ranges = new ArrayList<>();
+
+        //loop over every hardpoint section and get the weapon range values
+        for (Section s : this.sections){
+
+            if (s instanceof HardpointSection){
+                ranges.addAll(((HardpointSection) s).getMaxWeaponRange());
+                ranges.addAll(((HardpointSection) s).getMinimumWeaponRange());
+            }
+        }
+
+        //set max and min based on the values of all weapon ranges
+        this.max_weapon_range = Collections.max(ranges);
+        this.min_weapon_range = Collections.min(ranges);
+
+        //TODO: FIND A BETTER WAY TO REPRESENT OPTIMUM STRIKE DISTANCE
+        this.optimal_weapon_range = this.min_weapon_range + (this.max_weapon_range - this.min_weapon_range)/2;
+
     }
 
     public void simpleTrackContacts(Location [] new_contact_locations){
@@ -119,6 +147,21 @@ public class Ship {
 
     }
 
+    public float getMax_weapon_range() {
+        return max_weapon_range;
+    }
+
+    public float getOptimal_weapon_range() {
+        return optimal_weapon_range;
+    }
+
+    public float getMin_weapon_range() {
+        return min_weapon_range;
+    }
+
+    public ArrayList<Contact> getContacts(){
+        return this.contacts;
+    }
 
 
     public void setName(String name){

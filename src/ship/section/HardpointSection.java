@@ -2,6 +2,8 @@ package ship.section;
 import ship.ammunition.Ammunition;
 import ship.hardpoint.*;
 
+import java.util.ArrayList;
+
 public class HardpointSection extends Section{
 
     Hardpoint [] hardpoints;
@@ -15,8 +17,26 @@ public class HardpointSection extends Section{
         this.max_ammo = max_ammo;
     }
 
-    //TODO: Implement firing methods
+    //TODO: IMPLEMENT
     public void fire(){
 
     }
+
+
+    //TODO: IMPLEMENT
+    public ArrayList<Float> getMaxWeaponRange(){
+        return null;
+    }
+
+    //TODO: IMPLEMENT
+    public ArrayList<Float> getOptimalWeaponRange(){
+        return null;
+    }
+
+    //TODO: IMPLEMENT
+    public ArrayList<Float> getMinimumWeaponRange(){
+        return null;
+    }
+
+
 }

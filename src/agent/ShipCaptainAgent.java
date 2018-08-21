@@ -27,13 +27,6 @@ public class ShipCaptainAgent extends Agent implements Observer {
         return plan;
     }
 
-
-//    @Override
-//    public String toString(){
-//        String outstring = this.name + "_OF_" + this.ship.toString();
-//        return outstring;
-//    }
-
     @Override
     public void run() {
         System.out.println("SHIP AGENT "+this.agent_thread_name+" RUNNING");
