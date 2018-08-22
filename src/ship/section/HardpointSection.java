@@ -1,6 +1,7 @@
 package ship.section;
 import ship.ammunition.Ammunition;
 import ship.hardpoint.*;
+import ship.hardpoint.weapon.Weapon;
 
 import java.util.ArrayList;
 
@@ -27,21 +28,19 @@ public class HardpointSection extends Section{
 
     }
 
-
-    //TODO: IMPLEMENT
+    //TODO: CONFIGURE FOR MISSILE RANGES TOO
+    // get all the weapon ranges by looping over weapons
     public ArrayList<Float> getMaxWeaponRange(){
-        return null;
+        ArrayList<Float> ranges = new ArrayList<>();
+        for (Hardpoint h : hardpoints){
+            if (h instanceof Weapon){
+                ranges.add(((Weapon) h).getRange());
+            }
+        }
+
+        return ranges;
     }
 
-    //TODO: IMPLEMENT
-    public ArrayList<Float> getOptimalWeaponRange(){
-        return null;
-    }
-
-    //TODO: IMPLEMENT
-    public ArrayList<Float> getMinimumWeaponRange(){
-        return null;
-    }
 
 
 }

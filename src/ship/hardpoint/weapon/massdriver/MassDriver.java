@@ -1,19 +1,13 @@
 package ship.hardpoint.weapon.massdriver;
 
+import ship.hardpoint.weapon.Weapon;
+
 //TODO: COMPLETE AND COMBINE WITH AMMO
-public class MassDriver {
-    private float damage;
-    private float cooldown;
-    private float range;
+public class MassDriver extends Weapon{
 
-    public MassDriver(float damage, float cooldown, float range) {
-        this.damage = damage;
-        this.cooldown = cooldown;
-        this.range = range;
+    // constructor
+    public MassDriver(float cooldown, float damage, float range) {
+        super(cooldown, damage, range);
     }
 
-    //TODO: COMPLETE
-    public void fire(){
-
-    }
 }

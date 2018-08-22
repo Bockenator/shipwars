@@ -26,7 +26,6 @@ public class Ship {
     // weapon range data
     private float max_weapon_range;
     private float optimal_weapon_range;
-    private float min_weapon_range;
 
     // constructor
     public Ship(Section [] sections, String name) {
@@ -107,17 +106,23 @@ public class Ship {
         for (Section s : this.sections){
 
             if (s instanceof HardpointSection){
-                ranges.addAll(((HardpointSection) s).getMaxWeaponRange());
-                ranges.addAll(((HardpointSection) s).getMinimumWeaponRange());
+                for (float r : ((HardpointSection) s).getMaxWeaponRange()){
+                    ranges.add(r);
+                }
+
             }
         }
 
         // set max and min based on the values of all weapon ranges
         this.max_weapon_range = Collections.max(ranges);
-        this.min_weapon_range = Collections.min(ranges);
 
         //TODO: FIND A BETTER WAY TO REPRESENT OPTIMUM STRIKE DISTANCE
-        this.optimal_weapon_range = this.min_weapon_range + (this.max_weapon_range - this.min_weapon_range)/2;
+        // find average range and treat that as optimal weapon range
+        float sum_ranges = 0;
+        for (float f : ranges){
+            sum_ranges+=f;
+        }
+        this.optimal_weapon_range = sum_ranges/((float) ranges.size());
 
     }
 
@@ -199,10 +204,6 @@ public class Ship {
 
     public float getOptimal_weapon_range() {
         return optimal_weapon_range;
-    }
-
-    public float getMin_weapon_range() {
-        return min_weapon_range;
     }
 
     public ArrayList<Contact> getContacts(){

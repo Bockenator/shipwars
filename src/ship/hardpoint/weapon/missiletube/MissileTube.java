@@ -1,7 +1,9 @@
 package ship.hardpoint.weapon.missiletube;
 
+import ship.hardpoint.Hardpoint;
+
 //TODO: COMPLETE THIS AND COMBINE WITH AMMO
-public class MissileTube {
+public class MissileTube implements Hardpoint{
     private float cooldown;
     private int launch_capacity;
 
