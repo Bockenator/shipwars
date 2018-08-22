@@ -24,8 +24,16 @@ public class HardpointSection extends Section{
     }
 
     //TODO: IMPLEMENT
-    public void fire(){
+    public ArrayList<Weapon> getWeapons(){
+        ArrayList<Weapon> weapons = new ArrayList<>();
 
+        for (Hardpoint h : this.hardpoints){
+            if (h instanceof Weapon){
+                weapons.add((Weapon) h);
+            }
+        }
+
+        return weapons;
     }
 
     //TODO: CONFIGURE FOR MISSILE RANGES TOO

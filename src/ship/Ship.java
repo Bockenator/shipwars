@@ -1,4 +1,11 @@
 package ship;
+import ship.hardpoint.Hardpoint;
+import ship.hardpoint.weapon.Weapon;
+import ship.hardpoint.weapon.laser.Laser;
+import ship.hardpoint.weapon.massdriver.MassDriver;
+import ship.hardpoint.weapon.weaponprojectile.Beam;
+import ship.hardpoint.weapon.weaponprojectile.Projectile;
+import ship.hardpoint.weapon.weaponprojectile.WeaponProjectile;
 import ship.section.*;
 import utilities.Contact;
 import utilities.Location;
@@ -13,6 +20,7 @@ public class Ship {
     String name;
     Location location;
     Section [] sections;
+    ArrayList<Weapon> weapons;
     EngineSection engine;
     ShipSize ship_size;
     boolean has_engine = false;
@@ -23,6 +31,7 @@ public class Ship {
     ArrayList<Contact> contacts;
     ArrayList<Contact> nearby_enemies;
     ArrayList<Contact> on_collision_course;
+    Contact target;
     // weapon range data
     private float max_weapon_range;
     private float optimal_weapon_range;
@@ -41,6 +50,7 @@ public class Ship {
         }
         calcWeight();
         calcWeaponRanges();
+        findWeapons();
         this.location = new Location(0,0,0);
     }
 
@@ -58,9 +68,6 @@ public class Ship {
         }
     }
 
-    public Location getLocation(){
-        return this.location;
-    }
 
     //TODO: UPDATE
 //    public void turnXY(float increment){
@@ -124,6 +131,23 @@ public class Ship {
         }
         this.optimal_weapon_range = sum_ranges/((float) ranges.size());
 
+    }
+
+    // loop over every hardpoint section to get every weapon
+    private void findWeapons(){
+
+        for (Section s : this.sections){
+
+            if (s instanceof HardpointSection){
+
+                if (!(((HardpointSection) s).getWeapons().isEmpty())){
+
+                    for (Weapon w : ((HardpointSection) s).getWeapons()){
+                        this.weapons.add(w);
+                    }
+                }
+            }
+        }
     }
 
     // update and track radar contacts or delete/create ones as necessary
@@ -190,6 +214,26 @@ public class Ship {
         }
     }
 
+    // loop through all weapons and fire all weapons that are ready and return the projectiles created by it
+    public ArrayList<WeaponProjectile> fireAllWeapons(){
+        ArrayList<WeaponProjectile> fired = new ArrayList<>();
+
+        for (Weapon w : this.weapons){
+
+            if (w.readyToFire()){
+                w.fire();
+                if (w instanceof MassDriver) {
+                    fired.add(new Projectile(this.location, w.getDamage(), ((MassDriver) w).getProjectile_speed()));
+                }
+                else if(w instanceof Laser){
+                    fired.add(new Beam(this.location, w.getDamage()));
+                }
+            }
+        }
+
+        return fired;
+    }
+
     public ArrayList<Contact> getNearby_enemies() {
         return nearby_enemies;
     }
@@ -210,6 +254,9 @@ public class Ship {
         return this.contacts;
     }
 
+    public Location getLocation(){
+        return this.location;
+    }
 
     public void setName(String name){
         this.name = name;
