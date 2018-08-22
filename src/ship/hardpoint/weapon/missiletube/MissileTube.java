@@ -1,5 +1,6 @@
 package ship.hardpoint.weapon.missiletube;
 
+//TODO: COMPLETE THIS AND COMBINE WITH AMMO
 public class MissileTube {
     private float cooldown;
     private int launch_capacity;
@@ -9,7 +10,7 @@ public class MissileTube {
         this.launch_capacity = launch_capacity;
     }
 
-    //TODO: Complete firing code
+    //TODO: COMPLETE
     public void fire(){
 
     }

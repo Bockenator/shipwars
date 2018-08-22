@@ -27,7 +27,7 @@ public class WorldStateVariableCreator {
 
         // check for any close contacts on a collision course
         if(!(ship.getOn_collision_course().isEmpty())){
-            world_state.add(TruthVariable.COLLISION_IMMENENT);
+            world_state.add(TruthVariable.COLLISION_IMMINENT);
         }
 
         // check if a contact is an enemy and then check for distance

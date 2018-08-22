@@ -1,7 +1,7 @@
 package ship.section;
 import ship.Ship;
 import ship.ShipSize;
-
+//TODO: COMPLETE
 public class HangarSection extends Section{
     private int max_capacity;
     private ShipSize max_size;
@@ -9,6 +9,7 @@ public class HangarSection extends Section{
     Ship [] stored_ships;
     private float mass;
 
+    // constructor
     public HangarSection(int max_capacity, ShipSize max_size, int launch_capacity, Ship[] stored_ships, float mass) {
         super(mass);
         this.max_capacity = max_capacity;
@@ -17,12 +18,12 @@ public class HangarSection extends Section{
         this.stored_ships = stored_ships;
     }
 
-    //TODO: Complete launching system
+    //TODO: COMPLETE
     public void launch(){
 
     }
 
-    //TODO: Complete recall system
+    //TODO: COMPLETE
     public void recall(){
 
     }

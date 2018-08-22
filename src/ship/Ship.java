@@ -7,31 +7,35 @@ import utilities.TargetClassification;
 import java.util.ArrayList;
 import java.util.Collections;
 
+// ships are the objects which will fight in arenas, they are controlled by agents and can shoot and move
 public class Ship {
+    // ship parameters
     String name;
     Location location;
-    int contact_tracker = 1;
     Section [] sections;
     EngineSection engine;
     ShipSize ship_size;
     boolean has_engine = false;
     private float mass;
     private float acceleration = 0;
-    //contact data
+    // contact data
+    int contact_tracker = 1;
     ArrayList<Contact> contacts;
     ArrayList<Contact> nearby_enemies;
     ArrayList<Contact> on_collision_course;
-    //weapon range data
+    // weapon range data
     private float max_weapon_range;
     private float optimal_weapon_range;
     private float min_weapon_range;
 
+    // constructor
     public Ship(Section [] sections, String name) {
         this.sections = sections;
         this.name = name;
         init();
     }
 
+    // init to check ship has an engine and to calculate other parameters
     public void init(){
         if (!(checkForEngine(this.sections))) {
             System.out.println("WARNING: No Engine on ship "+this.toString());
@@ -73,7 +77,7 @@ public class Ship {
         this.ship_size = ship_size;
     }
 
-    //check that the ship has an engine and set the engine
+    // check that the ship has an engine and set the engine
     private boolean checkForEngine(Section [] sections){
         for(Section s : sections){
             if (s instanceof EngineSection){
@@ -85,7 +89,7 @@ public class Ship {
         return false;
     }
 
-    //calculate the total TODO: MASS
+    // calculate the total TODO: MASS
     private void calcWeight(){
         float cum_weight = 0;
         for(Section s : sections){
@@ -94,11 +98,12 @@ public class Ship {
         this.mass = cum_weight;
     }
 
+    // calculate weapon ranges based on the data of all weapons
     private void calcWeaponRanges(){
 
         ArrayList<Float> ranges = new ArrayList<>();
 
-        //loop over every hardpoint section and get the weapon range values
+        // loop over every hardpoint section and get the weapon range values
         for (Section s : this.sections){
 
             if (s instanceof HardpointSection){
@@ -107,7 +112,7 @@ public class Ship {
             }
         }
 
-        //set max and min based on the values of all weapon ranges
+        // set max and min based on the values of all weapon ranges
         this.max_weapon_range = Collections.max(ranges);
         this.min_weapon_range = Collections.min(ranges);
 
@@ -116,17 +121,19 @@ public class Ship {
 
     }
 
-    //clear all contact sub-lists and then update main contact list and then update sub-lists
+    // update and track radar contacts or delete/create ones as necessary
     public void simpleTrackContacts(Location [] new_contact_locations){
+
+        // clear contact sub-lists
         this.on_collision_course.clear();
         this.nearby_enemies.clear();
 
-        //assume all current contacts are invalid
+        // assume all current contacts are invalid
         for (Contact c : this.contacts){
             c.setRecently_updated(false);
         }
 
-        //update contacts and create a new one if needed
+        // update contacts and create a new one if needed
         boolean new_contact = true;
         for (Location l : new_contact_locations){
             new_contact = true;
@@ -139,7 +146,7 @@ public class Ship {
                     break;
                 }
             }
-            //if the location is not within the threshold of previous locations then create a new contact for it
+            // if the location is not within the threshold of previous locations then create a new contact for it
             if (new_contact){
                 Contact new_c = new Contact(l, this.contact_tracker);
                 this.contact_tracker++;
@@ -152,12 +159,13 @@ public class Ship {
             }
         }
 
+        // repopulate contact sub-lists
         findNearbyEnemies();
         findContactsOnCollisionCourse();
 
     }
 
-    //check for any contacts within 4000km that are enemies
+    // check for any contacts within 4000km that are enemies
     private void findNearbyEnemies(){
         for (Contact c : this.contacts){
             float dist = this.location.getEuclideanDistance(c.getLocation());
@@ -168,7 +176,7 @@ public class Ship {
         }
     }
 
-    //check for any contacts on a collision course
+    // check for any contacts on a collision course
     private void findContactsOnCollisionCourse(){
         for (Contact c : this.contacts){
             if(this.location.willCollideWith(c.getLocation().getDirection_vector())){

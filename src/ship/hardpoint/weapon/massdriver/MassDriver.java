@@ -1,5 +1,6 @@
 package ship.hardpoint.weapon.massdriver;
 
+//TODO: COMPLETE AND COMBINE WITH AMMO
 public class MassDriver {
     private float damage;
     private float cooldown;
@@ -11,7 +12,7 @@ public class MassDriver {
         this.range = range;
     }
 
-    //TODO: Complete firing code
+    //TODO: COMPLETE
     public void fire(){
 
     }

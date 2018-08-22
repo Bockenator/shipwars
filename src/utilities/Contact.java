@@ -1,12 +1,20 @@
 package utilities;
 
+// each ship maintains a list of contacts based on what it can see of the world, each contact has an id and
+// other parameters.
 public class Contact {
+    // as well as ids each contact maintains a location and target classification based on what the ship believes the
+    // contact to be
     String contact_id;
     Location location;
-    float volume;
     TargetClassification classification;
+    // contacts are deleted by the ships if they are not updated
     boolean recently_updated = true;
 
+    // TODO: USE
+    float volume;
+
+    // constructor
     public Contact(Location location, int contact_num) {
         this.location = location;
         this.volume = 0;
@@ -14,9 +22,6 @@ public class Contact {
         this.classification = TargetClassification.UNIDENTIFIED;
     }
 
-    public void setContact_id(String id){
-        this.contact_id = id;
-    }
 
     public String getContact_id(){
         return this.contact_id;
