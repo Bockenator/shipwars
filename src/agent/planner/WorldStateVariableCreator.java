@@ -1,12 +1,9 @@
 package agent.planner;
 
-import agent.planner.truthvariable.CollisionImminent;
-import agent.planner.truthvariable.EnemyInWeaponsRange;
-import agent.planner.truthvariable.EnemyNearby;
 import agent.planner.truthvariable.TruthVariable;
 import ship.Ship;
 import utilities.Contact;
-import utilities.Target_Classification;
+import utilities.TargetClassification;
 
 import java.util.ArrayList;
 
@@ -17,36 +14,34 @@ public class WorldStateVariableCreator {
 
     // method to generate a world state for the planner based on ship data
     public static ArrayList<TruthVariable> getWorldStateForShip(Ship ship){
+
         ArrayList<TruthVariable> world_state = new ArrayList<TruthVariable>();
 
-        for(Contact c : ship.getContacts()){
-
-            // check for any contacts close (within 50km)
-            if(c.getLocation().getEuclideanDistance(ship.getLocation()) < 50){
-
-                // any close objects on a collision course will generate a collision imminent truthvariable
-                if(c.getLocation().willCollideWith(ship.getLocation().getDirection_vector())){
-                    world_state.add(new CollisionImminent(c.getLocation()));
-                }
+        // check for any contacts which are enemy
+        for (Contact c : ship.getContacts()){
+            if (c.getClassification() == TargetClassification.ENEMY){
+                world_state.add(TruthVariable.ENEMY_ON_RADAR);
+                break;
             }
+        }
 
-            // check if a contact is an enemy and then check for distance
-            if(c.getClassification().equals(Target_Classification.ENEMY)){
+        // check for any close contacts on a collision course
+        if(!(ship.getOn_collision_course().isEmpty())){
+            world_state.add(TruthVariable.COLLISION_IMMENENT);
+        }
 
+        // check if a contact is an enemy and then check for distance
+        if(!(ship.getNearby_enemies().isEmpty())){
+            for(Contact c : ship.getNearby_enemies()) {
                 float dist = c.getLocation().getEuclideanDistance(ship.getLocation());
-
                 // if the contact is within in weapon range, generate enemy in weapon range truthvariable
                 if (dist < ship.getMax_weapon_range()) {
-
-                    world_state.add(new EnemyInWeaponsRange(c.getLocation()));
-                }
-
-                // if the enemy is within 2000km generate an enemy nearby truthvaribale
-                if (dist < 2000){
-
-                    world_state.add(new EnemyNearby(c.getLocation()));
+                    world_state.add(TruthVariable.ENEMY_IN_RANGE);
+                    break;
                 }
             }
+            world_state.add(TruthVariable.ENEMY_NEARBY);
+
         }
 
         return world_state;

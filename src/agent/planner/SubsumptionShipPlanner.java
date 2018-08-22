@@ -1,7 +1,6 @@
 package agent.planner;
 
 import action.Action;
-import agent.planner.truthvariable.CollisionImminent;
 import agent.planner.truthvariable.TruthVariable;
 import ship.Ship;
 
@@ -17,8 +16,11 @@ public class SubsumptionShipPlanner implements Planner {
         /*TODO: FINISH SUBSUMPTION PLANNER (ALSO MAYBE RETHINK TRUTHVARIABLE IDEA TO BE ENUMS AND CALC ALL OTHER
         INFO AGAIN AFTERWARDS)*/
 
+        if(world_state.contains(TruthVariable.COLLISION_IMMENENT)){
+            
+        }
+
         return plan;
     }
-
 
 }

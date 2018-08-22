@@ -1,6 +1,6 @@
 package utilities;
 
-public enum Target_Classification {
+public enum TargetClassification {
     FRIEND,
     NEUTRAL,
     ENEMY,

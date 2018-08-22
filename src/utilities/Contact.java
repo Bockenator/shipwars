@@ -4,14 +4,14 @@ public class Contact {
     String contact_id;
     Location location;
     float volume;
-    Target_Classification classification;
+    TargetClassification classification;
     boolean recently_updated = true;
 
     public Contact(Location location, int contact_num) {
         this.location = location;
         this.volume = 0;
         this.contact_id = "Contact "+contact_num;
-        this.classification = Target_Classification.UNIDENTIFIED;
+        this.classification = TargetClassification.UNIDENTIFIED;
     }
 
     public void setContact_id(String id){
@@ -38,11 +38,11 @@ public class Contact {
         this.recently_updated = recently_updated;
     }
 
-    public void updateClasssification(Target_Classification updated){
+    public void updateClasssification(TargetClassification updated){
         this.classification = updated;
     }
 
-    public Target_Classification getClassification() {
+    public TargetClassification getClassification() {
         return classification;
     }
 }

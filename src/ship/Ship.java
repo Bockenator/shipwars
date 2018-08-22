@@ -2,6 +2,7 @@ package ship;
 import ship.section.*;
 import utilities.Contact;
 import utilities.Location;
+import utilities.TargetClassification;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,7 +10,6 @@ import java.util.Collections;
 public class Ship {
     String name;
     Location location;
-    ArrayList<Contact> contacts;
     int contact_tracker = 1;
     Section [] sections;
     EngineSection engine;
@@ -17,6 +17,10 @@ public class Ship {
     boolean has_engine = false;
     private float mass;
     private float acceleration = 0;
+    //contact data
+    ArrayList<Contact> contacts;
+    ArrayList<Contact> nearby_enemies;
+    ArrayList<Contact> on_collision_course;
     //weapon range data
     private float max_weapon_range;
     private float optimal_weapon_range;
@@ -112,7 +116,10 @@ public class Ship {
 
     }
 
+    //clear all contact sub-lists and then update main contact list and then update sub-lists
     public void simpleTrackContacts(Location [] new_contact_locations){
+        this.on_collision_course.clear();
+        this.nearby_enemies.clear();
 
         //assume all current contacts are invalid
         for (Contact c : this.contacts){
@@ -145,6 +152,37 @@ public class Ship {
             }
         }
 
+        findNearbyEnemies();
+        findContactsOnCollisionCourse();
+
+    }
+
+    //check for any contacts within 4000km that are enemies
+    private void findNearbyEnemies(){
+        for (Contact c : this.contacts){
+            float dist = this.location.getEuclideanDistance(c.getLocation());
+            if((dist <= 4000) && (c.getClassification() == TargetClassification.ENEMY)){
+                this.nearby_enemies.add(c);
+
+            }
+        }
+    }
+
+    //check for any contacts on a collision course
+    private void findContactsOnCollisionCourse(){
+        for (Contact c : this.contacts){
+            if(this.location.willCollideWith(c.getLocation().getDirection_vector())){
+                this.on_collision_course.add(c);
+            }
+        }
+    }
+
+    public ArrayList<Contact> getNearby_enemies() {
+        return nearby_enemies;
+    }
+
+    public ArrayList<Contact> getOn_collision_course() {
+        return on_collision_course;
     }
 
     public float getMax_weapon_range() {
