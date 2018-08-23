@@ -44,6 +44,10 @@ public class WorldStateVariableCreator {
 
         }
 
+        if(ship.anyReadyToFire()){
+            world_state.add(TruthVariable.WEAPON_READY);
+        }
+
         return world_state;
     }
 }

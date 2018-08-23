@@ -62,7 +62,7 @@ public class Ship {
     }
 
     //TODO: UPDATE
-    public void deccelerate(float force){
+    public void decelerate(float force){
         if(has_engine){
             engine.decreaseForce(mass, force);
         }
@@ -232,6 +232,17 @@ public class Ship {
         }
 
         return fired;
+    }
+
+    // check if any weapon is ready to fire
+    public boolean anyReadyToFire(){
+        for(Weapon w : this.weapons){
+            if (w.readyToFire()){
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public ArrayList<Contact> getNearby_enemies() {

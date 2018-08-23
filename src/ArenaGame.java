@@ -1,7 +1,10 @@
 import action.AccelerateAction;
 import action.Action;
+import action.DecelerateAction;
+import action.FireAllWeaponsAction;
 import ship.*;
 import agent.*;
+import ship.hardpoint.weapon.weaponprojectile.WeaponProjectile;
 import utilities.*;
 
 import java.util.*;
@@ -28,6 +31,9 @@ public class ArenaGame extends Observable implements Runnable {
     // same as the keys in agent_plans hashmap (used to avoid mutiple getKeys() calls)
     public String [] agent_ids;
 
+    // list of projectiles flying around in the arena
+    private ArrayList<WeaponProjectile> projectiles;
+
     // constructor
     public ArenaGame(ArrayList<Ship> ships, String [] agent_ids) {
         this.ships = ships;
@@ -38,12 +44,14 @@ public class ArenaGame extends Observable implements Runnable {
     // initialiser
     private void init(){
         agent_plans = new HashMap<>();
-        //initialise the agent plans
+        // initialise the agent plans
         for (String agent_id : agent_ids){
             ArrayList<Action> temp = new ArrayList<>();
             System.out.println(agent_id);
             agent_plans.put(agent_id, temp);
         }
+
+        this.projectiles = new ArrayList<>();
     }
 
     // basic gamestate update
@@ -73,9 +81,24 @@ public class ArenaGame extends Observable implements Runnable {
 
     // execute one action
     public void executeAction(Action current_action){
+
+        // handle accelerate action
         if (current_action instanceof AccelerateAction){
             current_action.getShip().accelerate(((AccelerateAction) current_action).getForce_increase());
         }
+        // handle decelerate action
+        else if (current_action instanceof DecelerateAction){
+            current_action.getShip().decelerate(((DecelerateAction) current_action).getForce_decrease());
+        }
+        // handle fire all action
+        else if (current_action instanceof FireAllWeaponsAction){
+            ArrayList<WeaponProjectile> new_projectiles = current_action.getShip().fireAllWeapons();
+
+            for (WeaponProjectile w : new_projectiles){
+                this.projectiles.add(w);
+            }
+        }
+
     }
 
 

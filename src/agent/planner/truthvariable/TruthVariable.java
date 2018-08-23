@@ -5,5 +5,6 @@ public enum TruthVariable {
     COLLISION_IMMINENT,
     ENEMY_IN_RANGE,
     ENEMY_NEARBY,
-    ENEMY_ON_RADAR
+    ENEMY_ON_RADAR,
+    WEAPON_READY
 }

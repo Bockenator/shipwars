@@ -2,6 +2,7 @@ package action;
 
 import ship.Ship;
 
+// TODO: REVAMP ACTION SYSTEM TO NOT BE SO CLUNKY
 // actions determine what a ship should do (many actions make a plan)
 public abstract class Action {
 
